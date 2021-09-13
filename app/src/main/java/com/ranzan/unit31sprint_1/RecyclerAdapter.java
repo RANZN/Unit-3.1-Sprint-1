@@ -35,4 +35,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
     public int getItemCount() {
         return list.size();
     }
+
+    void updateUi(ArrayList<NowShowingItem> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
 }

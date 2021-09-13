@@ -27,6 +27,7 @@ public class HomeFragment extends Fragment implements ItemClickListener {
     private ItemClickListener listener;
     private ArrayList<NowShowingItem> list;
     private NavController navController;
+    private RecyclerAdapter recyclerAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,7 +41,6 @@ public class HomeFragment extends Fragment implements ItemClickListener {
         recyclerView = view.findViewById(R.id.recyclerView);
         fetchPost();
         setRecyclerView();
-        navController = Navigation.findNavController(view);
     }
 
     private void fetchPost() {
@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment implements ItemClickListener {
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                 if (response.body() != null) {
                     list = (ArrayList<NowShowingItem>) response.body().getNowShowing();
-                    setRecyclerView();
+                    recyclerAdapter.updateUi(list);
                 }
             }
 
@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment implements ItemClickListener {
 
     private void setRecyclerView() {
         list = new ArrayList<>();
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(list, listener);
+        recyclerAdapter = new RecyclerAdapter(list, listener);
         recyclerView.setAdapter(recyclerAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
