@@ -8,10 +8,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -23,7 +26,7 @@ public class HomeFragment extends Fragment implements ItemClickListener {
     private ViewPager2 viewPager2;
     private ItemClickListener listener;
     private ArrayList<NowShowingItem> list;
-
+    private NavController navController;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class HomeFragment extends Fragment implements ItemClickListener {
         recyclerView = view.findViewById(R.id.recyclerView);
         fetchPost();
         setRecyclerView();
+        navController = Navigation.findNavController(view);
     }
 
     private void fetchPost() {
@@ -67,5 +71,8 @@ public class HomeFragment extends Fragment implements ItemClickListener {
 
     @Override
     public void ItemClicked(Response response, int position) {
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("data", (Serializable) response.getNowShowing().get(position));
+        navController.navigate(R.id.action_homeFragment_to_movieDetailsFragment,bundle);
     }
 }
