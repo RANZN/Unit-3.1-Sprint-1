@@ -26,7 +26,7 @@ public class HomeFragment extends Fragment implements ItemClickListener {
     private RecyclerView recyclerView;
     private ViewPager2 viewPager2;
     private ItemClickListener listener;
-    private List<NowShowingItem> list;
+    private List<NowShowingItem> list=new ArrayList<>();
     private NavController navController;
     private RecyclerAdapter recyclerAdapter;
     @Override
