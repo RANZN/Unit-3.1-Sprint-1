@@ -7,13 +7,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
-    private ArrayList<NowShowingItem> list;
+    private List<NowShowingItem> list;
     private ItemClickListener listener;
 
-    public RecyclerAdapter(ArrayList<NowShowingItem> list, ItemClickListener listener) {
+    public RecyclerAdapter(List<NowShowingItem> list, ItemClickListener listener) {
         this.list = list;
         this.listener = listener;
     }
@@ -36,7 +36,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         return list.size();
     }
 
-    void updateUi(ArrayList<NowShowingItem> list) {
+    void updateUi(List<NowShowingItem> list) {
         this.list = list;
         notifyDataSetChanged();
     }

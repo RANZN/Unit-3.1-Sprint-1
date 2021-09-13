@@ -4,18 +4,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,7 +26,7 @@ public class HomeFragment extends Fragment implements ItemClickListener {
     private RecyclerView recyclerView;
     private ViewPager2 viewPager2;
     private ItemClickListener listener;
-    private ArrayList<NowShowingItem> list;
+    private List<NowShowingItem> list;
     private NavController navController;
     private RecyclerAdapter recyclerAdapter;
     @Override
@@ -40,7 +41,6 @@ public class HomeFragment extends Fragment implements ItemClickListener {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
         fetchPost();
-        setRecyclerView();
     }
 
     private void fetchPost() {
@@ -48,21 +48,23 @@ public class HomeFragment extends Fragment implements ItemClickListener {
         apiService.getData().enqueue(new Callback<Response>() {
             @Override
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                if (response.body() != null) {
-                    list = (ArrayList<NowShowingItem>) response.body().getNowShowing();
-                    recyclerAdapter.updateUi(list);
-                }
+                if (response.body() != null)
+                    list = response.body().getNowShowing();
+                setRecyclerView();
             }
 
             @Override
             public void onFailure(Call<Response> call, Throwable t) {
-
+                Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+
     private void setRecyclerView() {
-        list = new ArrayList<>();
+        if (list == null) {
+            list = new ArrayList<>();
+        }
         recyclerAdapter = new RecyclerAdapter(list, listener);
         recyclerView.setAdapter(recyclerAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
